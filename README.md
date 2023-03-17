@@ -1,13 +1,42 @@
-Para implementar la prueba de concepto de ArgoCD, primero se debe asegurar de que se tenga acceso al clúster de Kubernetes y que `kubectl` esté configurado correctamente. Luego, se deben ejecutar los siguientes comandos en orden:
+# Setup
 
-1. `kubectl create namespace argocd`: Crea un espacio de nombres llamado `argocd` en el clúster de Kubernetes.
+1. Install necessary dependencies:
+```
+sudo apt-get update
+sudo apt-get install virtualbox curl
+```
+These commands update the packages available on Ubuntu and then install the necessary dependencies to run Minikube: VirtualBox and curl.
 
-2. `kubectl apply -n argocd -f argo-cd-install.yaml`: Crea los recursos de Kubernetes necesarios para implementar ArgoCD en el espacio de nombres `argocd`.
+2. Download and install Minikube:
+```
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
+```
+The first command downloads the Minikube executable file for Linux. The second command installs it in the /usr/local/bin directory so that it can be executed from anywhere in the system.
 
-3. `kubectl port-forward svc/argocd-server -n argocd 8080:443`: Abre un túnel local de la máquina a través del puerto 8080 para acceder al servidor web de ArgoCD.
+3. Download and install Kubectl:
+```
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+sudo install kubectl /usr/local/bin/kubectl
+```
+These commands download the latest stable version of Kubectl for Linux and install it in the /usr/local/bin directory so that it can be executed from anywhere in the system.
 
-4. `kubectl create secret generic argocd-initial-admin-secret --from-literal=password=<password>`: Crea una contraseña para la cuenta de administrador inicial de ArgoCD. Reemplaza `<password>` con una contraseña segura.
+4. Start Minikube:
+```
+minikube start
+```
+This command starts Minikube with default configuration.
 
-5. Navegar a `https://localhost:8080` en un navegador web para acceder a la interfaz web de ArgoCD. Inicia sesión con el nombre de usuario `admin` y la contraseña que se configuró en el paso anterior.
+5. Verify the cluster status:
+```
+kubectl cluster-info
+```
+This command verifies that the Minikube cluster is up and running and displays relevant information about the cluster.
 
-Con estos comandos, se debe tener una instancia de ArgoCD en funcionamiento en el clúster de Kubernetes y se debe poder acceder a través del servidor web en `https://localhost:8080`.
+6. Configure Kubectl to use Minikube cluster:
+```
+kubectl config use-context minikube
+```
+This command sets the context of Kubectl to the Minikube cluster so that Kubernetes commands are executed on that cluster.
+
+
